@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alfaro Murphy — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Dev icons for language logos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/devicons/1.8.0/css/devicons.min.css">
+<style>
+:root {
+  --gold: #C9A348;
+  --gold-lt: #e8c56a;
+  --gold-dim: #7a5f28;
+  --gold-glow: rgba(201,163,72,0.12);
+  --bg: #080808;
+  --bg2: #0d0d0d;
+  --card: #111;
+  --card2: #161616;
+  --border: #1c1c1c;
+  --border2: #242424;
+  --text: #ececec;
+  --muted: #5a5a5a;
+  --muted2: #888;
+  --green: #22c55e;
+  --cyan: #06b6d4;
+  --white: #ffffff;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ── CURSOR ── */
+#cur{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;}
+#cur-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(201,163,72,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s;}
+body:hover #cur{opacity:1;}
+
+/* ── CANVAS ── */
+#rain{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.12;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:14px 20px;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(8,8,8,.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'Playfair Display',serif;
+  font-size:16px;
+  font-weight:700;
+  color:var(--gold);
+  letter-spacing:.02em;
+}
+.nav-links{display:flex;gap:20px;}
+.nav-links a{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;
+  color:var(--muted2);
+  text-decoration:none;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--gold);}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:80px 20px 60px;
+  position:relative;
+  z-index:1;
+  max-width:1100px;
+  margin:0 auto;
+}
+.hero-inner{width:100%;}
+
+.hero-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;
+  color:var(--green);
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+  opacity:0;animation:fadeUp .6s .2s forwards;
+}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--green);}
+
+.hero-name{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(38px,10vw,110px);
+  font-weight:900;
+  line-height:.92;
+  letter-spacing:-.02em;
+  margin-bottom:16px;
+  opacity:0;animation:fadeUp .7s .35s forwards;
+}
+.hero-name .gold-text{
+  background:linear-gradient(135deg,#a07830 0%,var(--gold) 30%,var(--gold-lt) 60%,var(--gold) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.hero-subtitle{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  color:var(--muted2);
+  margin-bottom:24px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:6px;
+  opacity:0;animation:fadeUp .7s .5s forwards;
+}
+.hero-subtitle .chip{
+  padding:3px 10px;
+  border:1px solid var(--border2);
+  border-radius:20px;
+  font-size:9px;
+  color:var(--gold);
+  background:var(--gold-glow);
+}
+
+.hero-intro{
+  font-size:13px;
+  line-height:1.8;
+  color:#9a9a9a;
+  max-width:680px;
+  margin-bottom:32px;
+  opacity:0;animation:fadeUp .7s .65s forwards;
+}
+.hero-intro strong{color:var(--text);font-weight:500;}
+
+.hero-stats{
+  display:flex;gap:0;
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  display:flex;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .7s .8s forwards;
+  width:100%;
+}
+.stat-item{
+  padding:14px 16px;
+  border-right:1px solid var(--border);
+  text-align:center;
+  flex:1;min-width:70px;
+}
+.stat-item:last-child{border-right:none;}
+.stat-val{
+  font-family:'Playfair Display',serif;
+  font-size:20px;
+  font-weight:700;
+  color:var(--gold);
+  display:block;
+  line-height:1;
+}
+.stat-lbl{
+  font-family:'JetBrains Mono',monospace;
+  font-size:7px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  margin-top:5px;
+  display:block;
+}
+
+/* ── SECTION BASE ── */
+.section{padding:52px 20px;max-width:1100px;margin:0 auto;position:relative;z-index:1;}
+.section-header{margin-bottom:32px;}
+.section-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;
+  color:var(--gold);
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:8px;
+}
+.section-tag::before{content:'//';color:var(--muted);}
+.section-tag::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border2),transparent);}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(22px,5vw,48px);
+  font-weight:700;
+  line-height:1.1;
+}
+
+/* ── DIVIDER ── */
+.divider{
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--border2),transparent);
+  margin:0 20px;
+  position:relative;z-index:1;
+}
+
+/* ── EDUCATION ── */
+.edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:640px){.edu-grid{grid-template-columns:1fr;}}
+
+.edu-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:32px;
+  display:flex;flex-direction:column;gap:20px;
+  transition:border-color .3s,transform .3s;
+  opacity:0;transform:translateY(24px);
+  position:relative;overflow:hidden;
+}
+.edu-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--gold-glow),transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.edu-card:hover{border-color:var(--gold-dim);transform:translateY(-4px);}
+.edu-card:hover::after{opacity:1;}
+.edu-card.visible{animation:fadeUp .6s ease forwards;}
+
+.edu-logo-wrap{
+  width:64px;height:64px;
+  border-radius:12px;
+  background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;padding:8px;
+  flex-shrink:0;
+}
+.edu-logo-wrap img{width:100%;height:100%;object-fit:contain;}
+
+/* SVG fallback logos */
+.uw-logo{width:48px;height:48px;}
+.mit-logo{width:48px;height:48px;}
+
+.edu-body{}
+.edu-school{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:700;
+  margin-bottom:6px;line-height:1.2;
+}
+.edu-degree{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--gold);
+  letter-spacing:.18em;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.edu-field{font-size:13px;color:var(--muted2);}
+.edu-location{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--muted);
+  display:flex;align-items:center;gap:6px;
+  margin-top:12px;
+}
+.edu-location::before{content:'📍';font-size:10px;}
+
+/* ── EXPERIENCE ── */
+.exp-timeline{position:relative;padding-left:28px;}
+.exp-timeline::before{
+  content:'';position:absolute;left:0;top:8px;bottom:8px;
+  width:1px;background:linear-gradient(to bottom,var(--gold),var(--border),transparent);
+}
+
+.exp-item{
+  position:relative;margin-bottom:28px;
+  opacity:0;transform:translateX(-16px);
+}
+.exp-item.visible{animation:slideIn .55s ease forwards;}
+.exp-item::before{
+  content:'';position:absolute;
+  left:-34px;top:24px;
+  width:12px;height:12px;
+  border-radius:50%;background:var(--gold);
+  box-shadow:0 0 0 3px var(--bg),0 0 16px var(--gold);
+}
+
+.exp-card-inner{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:24px 28px;
+  display:flex;gap:20px;align-items:flex-start;
+  transition:border-color .3s,transform .3s;
+  cursor:default;
+}
+.exp-card-inner:hover{border-color:var(--gold-dim);transform:translateX(4px);}
+
+.exp-logo-box{
+  width:52px;height:52px;flex-shrink:0;
+  border-radius:10px;
+  background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;padding:6px;
+}
+.exp-logo-box img{width:100%;height:100%;object-fit:contain;}
+
+/* company SVG logos */
+.company-logo-svg{width:36px;height:36px;}
+
+.exp-content{flex:1;}
+.exp-company{font-size:17px;font-weight:600;margin-bottom:3px;}
+.exp-role{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;}
+.exp-desc{font-size:13px;color:var(--muted2);line-height:1.7;}
+.exp-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.exp-tag{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  padding:3px 10px;border-radius:20px;
+  border:1px solid var(--border2);color:var(--muted2);
+  letter-spacing:.08em;
+}
+
+/* ── SKILLS / LANGUAGES ── */
+.lang-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(100px,1fr));
+  gap:12px;
+}
+.lang-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px 12px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  transition:all .25s ease;
+  opacity:0;
+  cursor:default;
+}
+.lang-card.visible{animation:popIn .4s ease forwards;}
+.lang-card:hover{
+  border-color:var(--gold-dim);
+  background:var(--gold-glow);
+  transform:translateY(-4px);
+  box-shadow:0 8px 32px rgba(201,163,72,.15);
+}
+.lang-icon{
+  width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;
+}
+.lang-icon img{width:36px;height:36px;object-fit:contain;}
+.lang-name{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--muted2);
+  text-align:center;letter-spacing:.05em;
+}
+.lang-card:hover .lang-name{color:var(--gold);}
+
+/* ── EXPERTISE CARDS ── */
+.exp2-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+@media(max-width:700px){.exp2-grid{grid-template-columns:1fr;}}
+@media(max-width:900px) and (min-width:701px){.exp2-grid{grid-template-columns:1fr 1fr;}}
+
+.exp2-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:28px 24px;
+  transition:all .3s ease;
+  opacity:0;transform:translateY(20px);
+  position:relative;overflow:hidden;
+}
+.exp2-card.visible{animation:fadeUp .6s ease forwards;}
+.exp2-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--cyan),var(--gold));
+  opacity:0;transition:opacity .3s;
+}
+.exp2-card:hover{border-color:var(--gold-dim);transform:translateY(-4px);}
+.exp2-card:hover::before{opacity:1;}
+
+.exp2-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:rgba(201,163,72,.08);border:1px solid var(--gold-dim);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:16px;
+}
+.exp2-title{font-size:17px;font-weight:600;margin-bottom:4px;}
+.exp2-sub{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;
+}
+.exp2-desc{font-size:13px;color:var(--muted2);line-height:1.7;}
+
+/* ── CODE BLOCK ── */
+.code-wrap{
+  background:#0c0c0c;
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  position:relative;
+}
+.code-wrap::before{
+  content:'';display:block;height:2px;
+  background:linear-gradient(90deg,var(--green),var(--cyan),var(--gold));
+}
+.code-top{
+  display:flex;align-items:center;gap:8px;
+  padding:14px 20px;border-bottom:1px solid var(--border);
+}
+.dot{width:10px;height:10px;border-radius:50%;}
+.dot.r{background:#ff5f56;}.dot.y{background:#ffbd2e;}.dot.g{background:#27c93f;}
+.code-filename{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  margin-left:auto;
+}
+.code-body{padding:24px 28px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.9;overflow-x:auto;}
+.kw{color:#f472b6;}.fn{color:var(--cyan);}.str{color:var(--green);}
+.num{color:#a78bfa;}.cm{color:#3a3a3a;}.cls{color:#fbbf24;}.prop{color:var(--gold);}
+.type-cur{display:inline-block;width:2px;height:14px;background:var(--gold);animation:blink 1s step-end infinite;vertical-align:middle;}
+
+/* ── THESIS ── */
+.thesis-wrap{
+  border:1px solid var(--gold-dim);border-radius:12px;
+  padding:24px 20px;
+  background:linear-gradient(135deg,rgba(201,163,72,.04),transparent);
+  position:relative;overflow:hidden;
+}
+.thesis-wrap::before{
+  content:'"';position:absolute;top:-20px;left:12px;
+  font-size:100px;color:var(--gold);opacity:.05;
+  font-family:'Playfair Display',serif;line-height:1;
+}
+.thesis-lbl{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px;
+}
+.thesis-text{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(15px,2.5vw,22px);
+  font-weight:400;line-height:1.7;color:var(--text);
+}
+
+/* ── FOOTER ── */
+footer{
+  padding:24px 20px;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:10px;
+  position:relative;z-index:1;max-width:1100px;margin:0 auto;
+}
+.footer-name{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold);}
+.footer-note{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.06em;}
+
+/* ── SCROLL INDICATOR ── */
+.scroll-hint{
+  position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  opacity:0;animation:fadeIn 1s .1s 1.6s forwards;
+}
+.scroll-hint span{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;}
+.scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,var(--gold),transparent);animation:pulse 2s ease infinite;}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{to{opacity:1;}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-16px);}to{opacity:1;transform:translateX(0);}}
+@keyframes popIn{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── DESKTOP UPSCALE ── */
+@media(min-width:900px){
+  nav{padding:18px 48px;}
+  .hero{padding:120px 48px 80px;}
+  .section{padding:80px 48px;}
+  .hero-name{font-size:clamp(56px,8vw,110px);}
+  .section-title{font-size:clamp(28px,4vw,48px);}
+  .hero-intro{font-size:15px;}
+  .edu-card{padding:28px;gap:18px;}
+  .edu-school{font-size:18px;}
+  .exp-card-inner{padding:20px 24px;}
+  .exp-company{font-size:16px;}
+  .thesis-wrap{padding:40px;}
+  .thesis-text{font-size:20px;}
+  footer{padding:36px 48px;}
+}
+
+/* ── MOBILE NAV ── */
+@media(max-width:600px){
+  .nav-links{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<canvas id="rain"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">AM</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#education">Education</a>
+    <a href="#experience">Experience</a>
+    <a href="#skills">Skills</a>
+    <a href="#expertise">Expertise</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="about">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Available for select engagements</div>
+    <h1 class="hero-name">
+      <span class="gold-text">Alfaro</span><br>Murphy
+    </h1>
+    <div class="hero-subtitle">
+      <span class="chip">Project Manager</span>
+      <span class="chip">Game Developer</span>
+      <span class="chip">MIT Graduate</span>
+      <span style="color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace;">Seattle · SF · Singapore · New York</span>
+    </div>
+    <p class="hero-intro">
+      I am a strategic <strong>Project Manager and Developer</strong> with a career spanning the world's most influential tech hubs — from <strong>Seattle and San Francisco</strong> to <strong>Singapore and New York</strong>. With a foundation in Mathematics and Computer Science from the <strong>University of Washington</strong> and an EECS Master's from <strong>MIT</strong>, I bridge the gap between complex logic and scalable execution.<br><br>
+      My journey includes optimizing cloud infrastructures at <strong>AWS</strong>, analyzing AI systems at <strong>Anthropic</strong>, ensuring financial system integrity at <strong>DBS Bank</strong>, and leading high-stakes projects at <strong>Avalanche Studios</strong>. I specialize in navigating the intersection of <strong>AI, game development, and mobile systems</strong> to deliver high-impact solutions.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item"><span class="stat-val">21+</span><span class="stat-lbl">Languages</span></div>
+      <div class="stat-item"><span class="stat-val">UE5</span><span class="stat-lbl">Game Engine</span></div>
+      <div class="stat-item"><span class="stat-val">MIT</span><span class="stat-lbl">Graduate</span></div>
+      <div class="stat-item"><span class="stat-val">4</span><span class="stat-lbl">Global Hubs</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>scroll</span><div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EDUCATION -->
+<section class="section" id="education">
+  <div class="section-header">
+    <div class="section-tag">Education</div>
+    <h2 class="section-title">Academic Foundation</h2>
+  </div>
+  <div class="edu-grid">
+
+    <!-- University of Washington -->
+    <div class="edu-card" data-delay="0">
+      <div class="edu-logo-wrap">
+        <!-- UW logo via SVG (purple W) -->
+        <svg viewBox="0 0 100 100" class="uw-logo" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="8" fill="#4b2e83"/>
+          <text x="50" y="72" text-anchor="middle" font-family="Georgia,serif" font-size="64" font-weight="bold" fill="#b7a57a">W</text>
+        </svg>
+      </div>
+      <div class="edu-body">
+        <div class="edu-degree">Bachelor of Science</div>
+        <div class="edu-school">University of Washington</div>
+        <div class="edu-field">Mathematics and Computer Science</div>
+        <div class="edu-location">Seattle, Washington</div>
+      </div>
+    </div>
+
+    <!-- MIT -->
+    <div class="edu-card" data-delay="150">
+      <div class="edu-logo-wrap">
+        <!-- MIT logo via SVG -->
+        <svg viewBox="0 0 100 100" class="mit-logo" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="8" fill="#A31F34"/>
+          <text x="50" y="62" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" font-weight="900" fill="white" letter-spacing="-1">MIT</text>
+          <rect x="10" y="68" width="80" height="3" fill="white" opacity=".7"/>
+          <text x="50" y="82" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="white" opacity=".9" letter-spacing="1">CAMBRIDGE</text>
+        </svg>
+      </div>
+      <div class="edu-body">
+        <div class="edu-degree">Master of Science</div>
+        <div class="edu-school">Massachusetts Institute of Technology</div>
+        <div class="edu-field">Electrical Engineering and Computer Science</div>
+        <div class="edu-location">Cambridge, Massachusetts</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section class="section" id="experience">
+  <div class="section-header">
+    <div class="section-tag">Experience</div>
+    <h2 class="section-title">Career Journey</h2>
+  </div>
+  <div class="exp-timeline">
+
+    <!-- AWS -->
+    <div class="exp-item" data-delay="0">
+      <div class="exp-card-inner">
+        <div class="exp-logo-box">
+          <svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" class="company-logo-svg" style="width:44px;height:28px;">
+            <text x="0" y="42" font-family="Arial,sans-serif" font-size="30" font-weight="900" fill="#FF9900">aws</text>
+          </svg>
+        </div>
+        <div class="exp-content">
+          <div class="exp-company">Amazon Web Services</div>
+          <div class="exp-role">Cloud Infrastructure Engineer</div>
+          <div class="exp-desc">Optimized large-scale cloud infrastructure systems, improving performance, reliability, and cost efficiency across distributed AWS services.</div>
+          <div class="exp-tags">
+            <span class="exp-tag">Cloud Architecture</span>
+            <span class="exp-tag">DevOps</span>
+            <span class="exp-tag">Infrastructure</span>
+            <span class="exp-tag">Seattle, WA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anthropic -->
+    <div class="exp-item" data-delay="100">
+      <div class="exp-card-inner">
+        <div class="exp-logo-box">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="company-logo-svg">
+            <rect width="100" height="100" rx="12" fill="#CC785C"/>
+            <text x="50" y="65" text-anchor="middle" font-family="Georgia,serif" font-size="48" font-weight="700" fill="white">A</text>
+          </svg>
+        </div>
+        <div class="exp-content">
+          <div class="exp-company">Anthropic</div>
+          <div class="exp-role">AI Systems Analyst</div>
+          <div class="exp-desc">Analyzed and evaluated AI systems performance, safety metrics, and behavioral patterns to support responsible model development and deployment.</div>
+          <div class="exp-tags">
+            <span class="exp-tag">AI Safety</span>
+            <span class="exp-tag">Systems Analysis</span>
+            <span class="exp-tag">Research</span>
+            <span class="exp-tag">San Francisco, CA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DBS Bank -->
+    <div class="exp-item" data-delay="200">
+      <div class="exp-card-inner">
+        <div class="exp-logo-box">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="company-logo-svg">
+            <rect width="100" height="100" rx="12" fill="#DA2128"/>
+            <text x="50" y="62" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="32" font-weight="900" fill="white">DBS</text>
+          </svg>
+        </div>
+        <div class="exp-content">
+          <div class="exp-company">DBS Bank</div>
+          <div class="exp-role">Financial Systems Engineer</div>
+          <div class="exp-desc">Ensured integrity and resilience of core financial systems and digital banking infrastructure across one of Asia's largest banking groups.</div>
+          <div class="exp-tags">
+            <span class="exp-tag">FinTech</span>
+            <span class="exp-tag">System Integrity</span>
+            <span class="exp-tag">Security</span>
+            <span class="exp-tag">Singapore</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Avalanche Studios -->
+    <div class="exp-item" data-delay="300">
+      <div class="exp-card-inner">
+        <div class="exp-logo-box">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="company-logo-svg">
+            <rect width="100" height="100" rx="12" fill="#0a0a0a"/>
+            <polygon points="50,10 90,80 10,80" fill="none" stroke="#e8c56a" stroke-width="6"/>
+            <text x="50" y="72" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#e8c56a" letter-spacing="1">AVALANCHE</text>
+          </svg>
+        </div>
+        <div class="exp-content">
+          <div class="exp-company">Avalanche Studios</div>
+          <div class="exp-role">Lead Project Manager</div>
+          <div class="exp-desc">Led high-stakes game development projects from concept to ship, coordinating cross-functional teams across engineering, art, and production pipelines.</div>
+          <div class="exp-tags">
+            <span class="exp-tag">Game Development</span>
+            <span class="exp-tag">Team Leadership</span>
+            <span class="exp-tag">Agile</span>
+            <span class="exp-tag">New York, NY</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- LIVE CODE BLOCK -->
+<section class="section">
+  <div class="code-wrap">
+    <div class="code-top">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <span class="code-filename">alfaro_murphy.profile.ts</span>
+    </div>
+    <div class="code-body"><pre><span class="cm">// ─── Alfaro Murphy · Professional Profile ───────────────────────</span>
+
+<span class="kw">interface</span> <span class="cls">Professional</span> {
+  <span class="prop">name</span>: <span class="cls">string</span>;
+  <span class="prop">roles</span>: <span class="cls">string</span>[];
+  <span class="prop">education</span>: { <span class="prop">school</span>: <span class="cls">string</span>; <span class="prop">degree</span>: <span class="cls">string</span> }[];
+  <span class="prop">companies</span>: <span class="cls">string</span>[];
+  <span class="prop">languages</span>: <span class="cls">string</span>[];
+}
+
+<span class="kw">const</span> <span class="fn">alfaro</span>: <span class="cls">Professional</span> = {
+  <span class="prop">name</span>:    <span class="str">"Alfaro Murphy"</span>,
+  <span class="prop">roles</span>:   [<span class="str">"Project Manager"</span>, <span class="str">"Developer"</span>, <span class="str">"Game Dev Lead"</span>],
+  <span class="prop">education</span>: [
+    { <span class="prop">school</span>: <span class="str">"University of Washington"</span>, <span class="prop">degree</span>: <span class="str">"BS Math & CS"</span> },
+    { <span class="prop">school</span>: <span class="str">"MIT"</span>,                      <span class="prop">degree</span>: <span class="str">"MS EECS"</span>      },
+  ],
+  <span class="prop">companies</span>: [<span class="str">"AWS"</span>, <span class="str">"Anthropic"</span>, <span class="str">"DBS Bank"</span>, <span class="str">"Avalanche Studios"</span>],
+  <span class="prop">languages</span>: [<span class="str">"Python"</span>, <span class="str">"Golang"</span>, <span class="str">"Rust"</span>, <span class="str">"C++"</span>, <span class="str">"TypeScript"</span>, <span class="str">"..."</span> + <span class="num">16</span>],
+  <span class="prop">hubs</span>:      [<span class="str">"Seattle"</span>, <span class="str">"San Francisco"</span>, <span class="str">"Singapore"</span>, <span class="str">"New York"</span>],
+};<span class="type-cur"></span></pre></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS / LANGUAGES -->
+<section class="section" id="skills">
+  <div class="section-header">
+    <div class="section-tag">Technical Arsenal</div>
+    <h2 class="section-title">21+ Languages &amp; Tools</h2>
+  </div>
+  <div class="lang-grid" id="lang-grid">
+    <!-- Each card: icon from devicons CDN or inline SVG -->
+    <!-- Using simple SVG colored icons for reliability -->
+    <div class="lang-card" data-d="0">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python" onerror="this.parentNode.innerHTML='🐍'"></div>
+      <span class="lang-name">Python</span>
+    </div>
+    <div class="lang-card" data-d="40">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original-wordmark.svg" alt="Go" onerror="this.parentNode.innerHTML='🔵'"></div>
+      <span class="lang-name">Golang</span>
+    </div>
+    <div class="lang-card" data-d="80">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/rust/rust-original.svg" alt="Rust" onerror="this.parentNode.innerHTML='🦀'"></div>
+      <span class="lang-name">Rust</span>
+    </div>
+    <div class="lang-card" data-d="120">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" alt="C++" onerror="this.parentNode.innerHTML='⚡'"></div>
+      <span class="lang-name">C++</span>
+    </div>
+    <div class="lang-card" data-d="160">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="TypeScript" onerror="this.parentNode.innerHTML='📘'"></div>
+      <span class="lang-name">TypeScript</span>
+    </div>
+    <div class="lang-card" data-d="200">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript" onerror="this.parentNode.innerHTML='📙'"></div>
+      <span class="lang-name">JavaScript</span>
+    </div>
+    <div class="lang-card" data-d="240">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="Java" onerror="this.parentNode.innerHTML='☕'"></div>
+      <span class="lang-name">Java</span>
+    </div>
+    <div class="lang-card" data-d="280">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kotlin/kotlin-original.svg" alt="Kotlin" onerror="this.parentNode.innerHTML='🟣'"></div>
+      <span class="lang-name">Kotlin</span>
+    </div>
+    <div class="lang-card" data-d="320">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/swift/swift-original.svg" alt="Swift" onerror="this.parentNode.innerHTML='🍎'"></div>
+      <span class="lang-name">Swift</span>
+    </div>
+    <div class="lang-card" data-d="360">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg" alt="C#" onerror="this.parentNode.innerHTML='🔷'"></div>
+      <span class="lang-name">C#</span>
+    </div>
+    <div class="lang-card" data-d="400">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg" alt="C" onerror="this.parentNode.innerHTML='©️'"></div>
+      <span class="lang-name">C</span>
+    </div>
+    <div class="lang-card" data-d="440">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg" alt="Dart" onerror="this.parentNode.innerHTML='🎯'"></div>
+      <span class="lang-name">Dart</span>
+    </div>
+    <div class="lang-card" data-d="480">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scala/scala-original.svg" alt="Scala" onerror="this.parentNode.innerHTML='🔴'"></div>
+      <span class="lang-name">Scala</span>
+    </div>
+    <div class="lang-card" data-d="520">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ruby/ruby-original.svg" alt="Ruby" onerror="this.parentNode.innerHTML='💎'"></div>
+      <span class="lang-name">Ruby</span>
+    </div>
+    <div class="lang-card" data-d="560">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-original.svg" alt="PHP" onerror="this.parentNode.innerHTML='🐘'"></div>
+      <span class="lang-name">PHP</span>
+    </div>
+    <div class="lang-card" data-d="600">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" alt="SQL" onerror="this.parentNode.innerHTML='🗄️'"></div>
+      <span class="lang-name">SQL</span>
+    </div>
+    <div class="lang-card" data-d="640">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/r/r-original.svg" alt="R" onerror="this.parentNode.innerHTML='📊'"></div>
+      <span class="lang-name">R</span>
+    </div>
+    <div class="lang-card" data-d="680">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/matlab/matlab-original.svg" alt="MATLAB" onerror="this.parentNode.innerHTML='📐'"></div>
+      <span class="lang-name">MATLAB</span>
+    </div>
+    <div class="lang-card" data-d="720">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/lua/lua-original.svg" alt="Lua" onerror="this.parentNode.innerHTML='🌙'"></div>
+      <span class="lang-name">Lua</span>
+    </div>
+    <div class="lang-card" data-d="760">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/haskell/haskell-original.svg" alt="Haskell" onerror="this.parentNode.innerHTML='λ'"></div>
+      <span class="lang-name">Haskell</span>
+    </div>
+    <div class="lang-card" data-d="800">
+      <div class="lang-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/objectivec/objectivec-plain.svg" alt="Obj-C" onerror="this.parentNode.innerHTML='[OC]'"></div>
+      <span class="lang-name">Obj-C</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERTISE -->
+<section class="section" id="expertise">
+  <div class="section-header">
+    <div class="section-tag">Expertise</div>
+    <h2 class="section-title">Core Specializations</h2>
+  </div>
+  <div class="exp2-grid">
+    <div class="exp2-card" data-delay="0">
+      <div class="exp2-icon">⬡</div>
+      <div class="exp2-title">Unreal Engine 5</div>
+      <div class="exp2-sub">Real-Time Simulation</div>
+      <div class="exp2-desc">Architecting high-fidelity systems for immersive gameplay, toolchains, and performant interactive worlds.</div>
+    </div>
+    <div class="exp2-card" data-delay="100">
+      <div class="exp2-icon">▲</div>
+      <div class="exp2-title">Unity</div>
+      <div class="exp2-sub">Cross-Platform Production</div>
+      <div class="exp2-desc">Leading scalable game delivery across mobile and desktop with disciplined engineering pipelines.</div>
+    </div>
+    <div class="exp2-card" data-delay="200">
+      <div class="exp2-icon">◈</div>
+      <div class="exp2-title">Causal AI Research</div>
+      <div class="exp2-sub">Decision Intelligence</div>
+      <div class="exp2-desc">Exploring cause-aware models that explain behavior, inform systems strategy, and support reliable autonomy.</div>
+    </div>
+    <div class="exp2-card" data-delay="300">
+      <div class="exp2-icon">☁</div>
+      <div class="exp2-title">Cloud Infrastructure</div>
+      <div class="exp2-sub">AWS · Distributed Systems</div>
+      <div class="exp2-desc">Designing and optimizing large-scale distributed cloud systems for performance, resilience, and cost efficiency.</div>
+    </div>
+    <div class="exp2-card" data-delay="400">
+      <div class="exp2-icon">📱</div>
+      <div class="exp2-title">Mobile Systems</div>
+      <div class="exp2-sub">iOS · Android · Cross-Platform</div>
+      <div class="exp2-desc">Building high-performance mobile applications with native and cross-platform frameworks at scale.</div>
+    </div>
+    <div class="exp2-card" data-delay="500">
+      <div class="exp2-icon">🏦</div>
+      <div class="exp2-title">FinTech Systems</div>
+      <div class="exp2-sub">Financial Engineering</div>
+      <div class="exp2-desc">Ensuring integrity and security of mission-critical financial infrastructure for tier-1 banking institutions.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- THESIS -->
+<section class="section">
+  <div class="thesis-wrap">
+    <div class="thesis-lbl">Leadership Thesis</div>
+    <p class="thesis-text" id="thesis-text"></p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Alfaro Murphy</div>
+  <div class="footer-note">© 2025 · Built with precision &amp; passion · Seattle · SF · Singapore · New York</div>
+</footer>
+
+<script>
+// ── CURSOR ──
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,.lang-card,.exp-card-inner,.exp2-card,.edu-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='scale(3)';ring.style.transform='scale(1.5)';ring.style.borderColor='var(--gold)';});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='scale(1)';ring.style.transform='scale(1)';ring.style.borderColor='rgba(201,163,72,.5)';});
+});
+
+// ── MATRIX RAIN ──
+const canvas=document.getElementById('rain');
+const ctx=canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+resize(); window.addEventListener('resize',resize);
+const syms='{}[]()<>=+-*/!?;:,.01ABCDEFGHIJKLMNOPQabcdefghijklmnopqr_$#@~^&|';
+const fs=14;
+let cols=Math.floor(innerWidth/fs);
+let drops=Array.from({length:cols},()=>-Math.random()*80);
+const golds=['#C9A348','#8a6428','#e8c56a','#4a3010','#b08030'];
+function draw(){
+  ctx.fillStyle='rgba(8,8,8,.045)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  drops.forEach((y,i)=>{
+    ctx.fillStyle=golds[Math.floor(Math.random()*golds.length)];
+    ctx.font=`${fs}px 'JetBrains Mono',monospace`;
+    ctx.fillText(syms[Math.floor(Math.random()*syms.length)],i*fs,y*fs);
+    if(y*fs>canvas.height&&Math.random()>.975) drops[i]=0;
+    drops[i]+=.45;
+  });
+}
+setInterval(draw,38);
+
+// ── INTERSECTION OBSERVER ──
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting) return;
+    const el=e.target;
+    const delay=parseInt(el.dataset.delay||el.dataset.d||0);
+    setTimeout(()=>el.classList.add('visible'),delay);
+  });
+},{threshold:0.08});
+
+document.querySelectorAll('.edu-card,.exp-item,.lang-card,.exp2-card').forEach(el=>io.observe(el));
+
+// ── TYPEWRITER ──
+const tEl=document.getElementById('thesis-text');
+const tFull="A visionary Leader Project Manager in Game Development and former Team Leader in Mobile Development, Alfaro balances high-stakes technical decisions with the human elements of leadership — building systems that endure across AWS, Anthropic, DBS Bank, and Avalanche Studios.";
+let ti=0, started=false;
+new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting&&!started){
+    started=true;
+    (function type(){
+      if(ti<tFull.length){tEl.textContent=tFull.slice(0,++ti);setTimeout(type,16+Math.random()*18);}
+    })();
+  }
+},{threshold:.3}).observe(tEl);
+</script>
+</body>
+</html>
